@@ -15,7 +15,16 @@ class FlashcardScreen {
   show() {
     this.containerElement.classList.remove('inactive');
     const flashcardContainer = document.querySelector('#flashcard-container');
-    const card = new Flashcard(flashcardContainer, 'word', 'definition');
+    //const card = new Flashcard(flashcardContainer, 'word', 'definition');
+
+      let words0 = Object.entries(FLASHCARD_DECKS[0].words);
+      let words1 = Object.entries(FLASHCARD_DECKS[1].words);
+      let words2 = Object.entries(FLASHCARD_DECKS[2].words);
+      let tests = Object.entries(FLASHCARD_DECKS);
+      console.log(words0[0][0]);
+      console.log(tests);
+
+    const card = new Flashcard(flashcardContainer, words0[0][0], words0[0][1]);
   }
 
   hide() {

@@ -9,6 +9,9 @@
 class MenuScreen {
   constructor(containerElement) {
     this.containerElement = containerElement;
+    document.getElementById("deck0").innerHTML=FLASHCARD_DECKS[0].title;
+    document.getElementById("deck1").innerHTML=FLASHCARD_DECKS[1].title;
+    document.getElementById("deck2").innerHTML=FLASHCARD_DECKS[2].title;
   }
 
   show() {
