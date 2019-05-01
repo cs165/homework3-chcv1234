@@ -8,6 +8,13 @@
 
 class Flashcard {
   constructor(containerElement, frontText, backText) {
+
+      this.originX = null;
+      this.originY = null;
+      this.offsetX = 0;
+      this.offsetY = 0;
+      this.dragStarted = false;
+
     this.containerElement = containerElement;
 
     this._flipCard = this._flipCard.bind(this);
@@ -16,6 +23,12 @@ class Flashcard {
     this.containerElement.append(this.flashcardElement);
 
     this.flashcardElement.addEventListener('pointerup', this._flipCard);
+
+
+      this.onDragStart = this.onDragStart.bind(this);
+      this.onDragMove = this.onDragMove.bind(this);
+    this.flashcardElement.addEventListener('pointerdown',this.onDragStart);
+    this.flashcardElement.addEventListener('pointermove',this.onDragMove);
   }
 
   // Creates the DOM object representing a flashcard with the given
@@ -52,6 +65,46 @@ class Flashcard {
   }
 
   _flipCard(event) {
-    this.flashcardElement.classList.toggle('show-word');
+
+    if((this.originX - event.clientX) === 0 && (this.originY - event.clientY) === 0)
+    {
+        this.flashcardElement.classList.toggle('show-word');
+    }
+
+
   }
+
+/*
+    let originX = null;
+    let originY = null;
+    let offsetX = 0;
+    let offsetY = 0;
+    let dragStarted = false;
+*/
+    onDragStart(event) {
+        this.originX = event.clientX;
+        this.originY = event.clientY;
+        this.dragStarted = true;
+        event.currentTarget.setPointerCapture(event.pointerId);
+    }
+
+    onDragMove(event) {
+        if (!this.dragStarted) {
+            return;
+        }
+        event.preventDefault();
+        const deltaX = event.clientX - this.originX;
+        const deltaY = event.clientY - this.originY;
+        const translateX = this.offsetX + deltaX;
+        const translateY = this.offsetY + deltaY;
+        event.currentTarget.style.transform = 'translate(' +
+            translateX + 'px, ' + translateY + 'px)' + ' ' + 'rotate(' + translateX * 0.2 + 'deg)';
+    }
+
+    onDragEnd(event) {
+        dragStarted = false;
+        offsetX += event.clientX - originX;
+        offsetY += event.clientY - originY;
+    }
+
 }

@@ -22,6 +22,7 @@ class App {
      this.menu.hide();
      this.flashcards.show();
 
+
     // Uncomment this pair of lines to see the "results" screen:
     // this.menu.hide();
     // this.results.show();

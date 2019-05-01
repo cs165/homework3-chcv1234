@@ -25,6 +25,7 @@ class FlashcardScreen {
       console.log(tests);
 
     const card = new Flashcard(flashcardContainer, words0[0][0], words0[0][1]);
+    
   }
 
   hide() {
