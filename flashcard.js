@@ -14,6 +14,8 @@ class Flashcard {
       this.offsetX = 0;
       this.offsetY = 0;
       this.dragStarted = false;
+      this.translateX = 0;
+      this.translateY = 0;
 
     this.containerElement = containerElement;
 
@@ -29,6 +31,7 @@ class Flashcard {
       this.onDragMove = this.onDragMove.bind(this);
     this.flashcardElement.addEventListener('pointerdown',this.onDragStart);
     this.flashcardElement.addEventListener('pointermove',this.onDragMove);
+
   }
 
   // Creates the DOM object representing a flashcard with the given
@@ -95,10 +98,12 @@ class Flashcard {
         event.preventDefault();
         const deltaX = event.clientX - this.originX;
         const deltaY = event.clientY - this.originY;
-        const translateX = this.offsetX + deltaX;
-        const translateY = this.offsetY + deltaY;
+        this.translateX = this.offsetX + deltaX;
+        this.translateY = this.offsetY + deltaY;
         event.currentTarget.style.transform = 'translate(' +
-            translateX + 'px, ' + translateY + 'px)' + ' ' + 'rotate(' + translateX * 0.2 + 'deg)';
+            this.translateX + 'px, ' + this.translateY + 'px)' + ' ' + 'rotate(' + this.translateX * 0.2 + 'deg)';
+
+        //console.log(this.translateX);
     }
 
     onDragEnd(event) {

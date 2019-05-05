@@ -10,6 +10,17 @@
 class FlashcardScreen {
   constructor(containerElement) {
     this.containerElement = containerElement;
+
+    /*
+      this.originX = null;
+      this.originY = null;
+      this.offsetX = 0;
+      this.offsetY = 0;
+      this.dragStarted = false;
+      this.translateX = 0;
+      this.translateY = 0;
+    */
+    this.card = null ;
   }
 
   show() {
@@ -24,11 +35,30 @@ class FlashcardScreen {
       console.log(words0[0][0]);
       console.log(tests);
 
-    const card = new Flashcard(flashcardContainer, words0[0][0], words0[0][1]);
+    this.card = new Flashcard(flashcardContainer, words0[0][0], words0[0][1]);
+
+      this.getDistance = this.getDistance.bind(this);
+    this.card.flashcardElement.addEventListener('pointermove', this.getDistance);
+
 
   }
 
   hide() {
     this.containerElement.classList.add('inactive');
   }
+
+  getDistance(event)
+  {
+    console.log(this.card.translateX);
+
+    if(this.card.translateX >= 150 || this.card.translateX <= -150)
+    {
+
+    }
+    else
+    {
+
+    }
+  }
+
 }
