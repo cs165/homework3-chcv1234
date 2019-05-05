@@ -74,6 +74,11 @@ class Flashcard {
         this.flashcardElement.classList.toggle('show-word');
     }
 
+    if((this.originX - event.clientX) < 150 && (this.originX - event.clientX) > -150 )
+    {
+        event.currentTarget.style.transform = 'translate(' + 0 + 'px, ' + 0 + 'px)' ;
+        event.currentTarget.style.transition = 'transform .6s' ;
+    }
 
   }
 
@@ -89,6 +94,7 @@ class Flashcard {
         this.originY = event.clientY;
         this.dragStarted = true;
         event.currentTarget.setPointerCapture(event.pointerId);
+        event.currentTarget.style.transition = '' ;
     }
 
     onDragMove(event) {

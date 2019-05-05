@@ -21,6 +21,13 @@ class FlashcardScreen {
       this.translateY = 0;
     */
     this.card = null ;
+    this.R = 0 ;
+    this.W = 0 ;
+    this.RF = false ;
+    this.WF = false ;
+    this.right = document.querySelector(".correct") ;
+    this.wrong = document.querySelector(".incorrect");
+
   }
 
   show() {
@@ -37,6 +44,9 @@ class FlashcardScreen {
 
     this.card = new Flashcard(flashcardContainer, words0[0][0], words0[0][1]);
 
+    this.right.innerHTML = this.R ;
+    this.wrong.innerHTML = this.W ;
+
       this.getDistance = this.getDistance.bind(this);
     this.card.flashcardElement.addEventListener('pointermove', this.getDistance);
 
@@ -51,12 +61,38 @@ class FlashcardScreen {
   {
     console.log(this.card.translateX);
 
-    if(this.card.translateX >= 150 || this.card.translateX <= -150)
-    {
+      const back = document.querySelector('body');
 
+    if(this.card.translateX >= 150)
+    {
+      back.style.backgroundColor = "#97b7b7";
+      //this.R += 1;
+      this.RF = true ;
+        this.right.innerHTML = this.R+1 ;
+    }
+    else if(this.card.translateX <= -150)
+    {
+        back.style.backgroundColor = "#97b7b7";
+        //this.W += 1 ;
+        this.WF = true ;
+        this.wrong.innerHTML = this.W+1 ;
     }
     else
     {
+      if(this.RF === true)
+      {
+        //this.R -= 1;
+        this.RF = false ;
+          this.right.innerHTML = this.R ;
+      }
+      else if(this.WF === true)
+      {
+        //this.W -= 1;
+        this.WF = false ;
+        this.wrong.innerHTML = this.W ;
+      }
+
+      back.style.backgroundColor = "#d0e6df" ;
 
     }
   }
