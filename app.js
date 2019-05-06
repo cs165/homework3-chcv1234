@@ -9,22 +9,46 @@
 
 class App {
   constructor() {
-    const menuElement = document.querySelector('#menu');
-    this.menu = new MenuScreen(menuElement);
+    this.menuElement = document.querySelector('#menu');
+    this.menu = new MenuScreen(this.menuElement);
+    this.tocard = this.tocard.bind(this);
+        document.addEventListener('menuClick',this.tocard);
 
-    const mainElement = document.querySelector('#main');
-    this.flashcards = new FlashcardScreen(mainElement);
+    this.mainElement = document.querySelector('#main');
+    this.flashcards ;
+      this.toresult = this.toresult.bind(this);
+    //this.flashcards = new FlashcardScreen(mainElement);
 
-    const resultElement = document.querySelector('#results');
-    this.results = new ResultsScreen(resultElement);
+    this.resultElement = document.querySelector('#results');
+    this.results ;
+    //this.results = new ResultsScreen(resultElement);
 
     // Uncomment this pair of lines to see the "flashcard" screen:
-     this.menu.hide();
-     this.flashcards.show();
+    // this.menu.hide();
+    // this.flashcards.show();
 
 
     // Uncomment this pair of lines to see the "results" screen:
-    // this.menu.hide();
-    // this.results.show();
+     //this.menu.hide();
+     //this.results.show();
+
   }
+
+    tocard(event)
+    {
+        // Uncomment this pair of lines to see the "flashcard" screen:
+        //this.title=event.detail.title;
+        this.flashcards = new FlashcardScreen(this.mainElement,event.detail.deck);
+        this.menu.hide();
+        this.flashcards.show();
+        document.addEventListener('cardend',this.toresult);
+    }
+
+    toresult(event)
+    {
+        this.results = new ResultsScreen(this.resultElement,event.detail.Right,event.detail.Wrong);
+        this.flashcards.hide();
+        this.results.show();
+    }
+
 }

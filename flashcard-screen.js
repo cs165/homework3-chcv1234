@@ -8,8 +8,9 @@
 // - Adding additional fields
 
 class FlashcardScreen {
-  constructor(containerElement) {
+  constructor(containerElement,deck) {
     this.containerElement = containerElement;
+    this.deck = deck ;
 
     /*
       this.originX = null;
@@ -28,27 +29,36 @@ class FlashcardScreen {
     this.right = document.querySelector(".correct") ;
     this.wrong = document.querySelector(".incorrect");
 
+    this.words ;
+    this.length ;
+    this.cnt = 0 ;
+
+    this.REdeck = [] ;
   }
 
   show() {
     this.containerElement.classList.remove('inactive');
-    const flashcardContainer = document.querySelector('#flashcard-container');
+    this.flashcardContainer = document.querySelector('#flashcard-container');
     //const card = new Flashcard(flashcardContainer, 'word', 'definition');
 
-      let words0 = Object.entries(FLASHCARD_DECKS[0].words);
-      let words1 = Object.entries(FLASHCARD_DECKS[1].words);
-      let words2 = Object.entries(FLASHCARD_DECKS[2].words);
+      this.words = Object.entries(FLASHCARD_DECKS[this.deck].words);
+      this.length = Object.keys(FLASHCARD_DECKS[this.deck].words).length;
+      //let words1 = Object.entries(FLASHCARD_DECKS[1].words);
+      //let words2 = Object.entries(FLASHCARD_DECKS[2].words);
       let tests = Object.entries(FLASHCARD_DECKS);
-      console.log(words0[0][0]);
+      console.log(this.words[0][0]);
+      console.log(this.length);
       console.log(tests);
 
-    this.card = new Flashcard(flashcardContainer, words0[0][0], words0[0][1]);
+    this.card = new Flashcard(this.flashcardContainer, this.words[0][0], this.words[0][1]);
 
     this.right.innerHTML = this.R ;
     this.wrong.innerHTML = this.W ;
 
       this.getDistance = this.getDistance.bind(this);
+      this.next = this.next.bind(this);
     this.card.flashcardElement.addEventListener('pointermove', this.getDistance);
+    this.card.flashcardElement.addEventListener('pointerup', this.next);
 
 
   }
@@ -95,6 +105,58 @@ class FlashcardScreen {
       back.style.backgroundColor = "#d0e6df" ;
 
     }
+  }
+
+  next(event)
+  {
+      if(this.card.translateX >= 150 || this.card.translateX <= -150)
+      {
+          if(this.RF === true)
+          {
+              this.R += 1;
+              this.RF = false;
+              this.REdeck[this.cnt] = true ;
+          }
+          else if(this.WF === true)
+          {
+              this.W += 1;
+              this.WF = false;
+              this.REdeck[this.cnt] = false ;
+          }
+
+          if(this.cnt < this.length)
+          {
+              console.log(this.REdeck);
+
+              while(this.flashcardContainer.firstChild)
+              {
+                  this.flashcardContainer.removeChild(this.flashcardContainer.firstChild);
+              }
+
+              if(this.cnt === this.length-1)
+              {
+                  const back = document.querySelector('body');
+                  back.style.backgroundColor = "#d0e6df" ;
+                  let cardend = new CustomEvent("cardend",{detail:{Right : this.R , Wrong : this.W}});
+                  document.dispatchEvent(cardend);
+              }
+              else
+              {
+                  this.card = new Flashcard(this.flashcardContainer, this.words[this.cnt+1][0], this.words[this.cnt+1][1]);
+                  this.card.flashcardElement.addEventListener('pointermove', this.getDistance);
+                  this.card.flashcardElement.addEventListener('pointerup', this.next);
+
+                  this.cnt ++ ;
+
+                  const back = document.querySelector('body');
+                  back.style.backgroundColor = "#d0e6df" ;
+              }
+
+
+          }
+      }
+
+
   }
 
 }
