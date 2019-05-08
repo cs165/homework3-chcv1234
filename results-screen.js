@@ -13,6 +13,9 @@ class ResultsScreen {
     this.W = Wrong ;
     this.percent = 0 ;
 
+    this.backtest = this.backtest.bind(this);
+    this.backmenu = this.backmenu.bind(this);
+
     if(this.R === 0)
     {
       this.precent = 0 ;
@@ -25,7 +28,7 @@ class ResultsScreen {
 
   }
 
-  show(numberCorrect, numberWrong) {
+  show() {
     this.containerElement.classList.remove('inactive');
 
     this.containerElement.querySelector('#results .percent').innerHTML = this.percent;
@@ -35,14 +38,47 @@ class ResultsScreen {
     if(this.percent === 100)
     {
         this.containerElement.querySelector('.continue').innerHTML = "Start over?";
+        //let retest = new CustomEvent("retest",{detail:{RE: true}});
+        //document.dispatchEvent(retest);
     }
     else
     {
         this.containerElement.querySelector('.continue').innerHTML = "Continue";
+        //let retest = new CustomEvent("retest",{detail:{RE: false}});
+        //document.dispatchEvent(retest);
     }
+
+      this.containerElement.querySelector('.continue').addEventListener('click',this.backtest);
+      this.containerElement.querySelector('.to-menu').addEventListener('click',this.backmenu);
   }
 
   hide() {
     this.containerElement.classList.add('inactive');
+  }
+
+  backtest()
+  {
+      this.containerElement.querySelector('.continue').removeEventListener('click',this.backtest);
+      this.containerElement.querySelector('.to-menu').removeEventListener('click',this.backmenu);
+
+    if(this.percent === 100)
+    {
+        let retest = new CustomEvent("retest",{detail:{RE: true}});
+        document.dispatchEvent(retest);
+    }
+    else
+    {
+        let retest = new CustomEvent("retest",{detail:{RE: false}});
+        document.dispatchEvent(retest);
+    }
+
+  }
+
+  backmenu()
+  {
+      this.containerElement.querySelector('.continue').removeEventListener('click',this.backtest);
+      this.containerElement.querySelector('.to-menu').removeEventListener('click',this.backmenu);
+      let remenu = new CustomEvent("remenu",{detail:{menu: true}});
+      document.dispatchEvent(remenu);
   }
 }

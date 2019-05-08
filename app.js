@@ -21,6 +21,8 @@ class App {
 
     this.resultElement = document.querySelector('#results');
     this.results ;
+        this.again = this.again.bind(this);
+        this.allagain = this.allagain.bind(this);
     //this.results = new ResultsScreen(resultElement);
 
     // Uncomment this pair of lines to see the "flashcard" screen:
@@ -49,6 +51,46 @@ class App {
         this.results = new ResultsScreen(this.resultElement,event.detail.Right,event.detail.Wrong);
         this.flashcards.hide();
         this.results.show();
+        document.addEventListener('retest',this.again);
+        document.addEventListener('remenu',this.allagain);
     }
 
+    again(event)
+    {
+        document.removeEventListener('retest',this.again);
+        document.removeEventListener('remenu',this.allagain);
+
+        if(event.detail.RE === true)
+        {
+            this.flashcards.card = null ;
+            this.flashcards.R = 0 ;
+            this.flashcards.W = 0 ;
+            this.flashcards.RF = false ;
+            this.flashcards.WF = false ;
+            this.flashcards.cnt = 0 ;
+            this.flashcards.RE = false ;
+            this.REdeck = [] ;
+            this.flashcards.show();
+            this.results.hide();
+        }
+        else if(event.detail.RE === false)
+        {
+            this.flashcards.card = null ;
+            this.flashcards.W = 0 ;
+            this.flashcards.RF = false ;
+            this.flashcards.WF = false ;
+            this.flashcards.cnt = 0 ;
+            this.flashcards.RE = true ;
+            this.flashcards.show();
+            this.results.hide();
+        }
+    }
+
+    allagain(event)
+    {
+        document.removeEventListener('retest',this.again);
+        document.removeEventListener('remenu',this.allagain);
+        this.menu.show();
+        this.results.hide();
+    }
 }

@@ -34,6 +34,7 @@ class FlashcardScreen {
     this.cnt = 0 ;
 
     this.REdeck = [] ;
+    this.RE = false ;
   }
 
   show() {
@@ -43,6 +44,8 @@ class FlashcardScreen {
 
       this.words = Object.entries(FLASHCARD_DECKS[this.deck].words);
       this.length = Object.keys(FLASHCARD_DECKS[this.deck].words).length;
+
+
       //let words1 = Object.entries(FLASHCARD_DECKS[1].words);
       //let words2 = Object.entries(FLASHCARD_DECKS[2].words);
       let tests = Object.entries(FLASHCARD_DECKS);
@@ -50,10 +53,32 @@ class FlashcardScreen {
       console.log(this.length);
       console.log(tests);
 
-    this.card = new Flashcard(this.flashcardContainer, this.words[0][0], this.words[0][1]);
+      if(this.RE === false)
+      {
+          for(let i=0;i<this.length;i++)
+          {
+              this.REdeck[i] = false ;
+          }
 
-    this.right.innerHTML = this.R ;
-    this.wrong.innerHTML = this.W ;
+          this.card = new Flashcard(this.flashcardContainer, this.words[0][0], this.words[0][1]);
+      }
+      else
+      {
+          for(let i=0;i<this.length;i++)
+          {
+              if(this.REdeck[i] === false)
+              {
+                  this.card = new Flashcard(this.flashcardContainer, this.words[i][0], this.words[i][1]);
+                  this.cnt = i ;
+                  break ;
+              }
+
+
+          }
+      }
+
+      this.right.innerHTML = this.R ;
+      this.wrong.innerHTML = this.W ;
 
       this.getDistance = this.getDistance.bind(this);
       this.next = this.next.bind(this);
@@ -133,8 +158,28 @@ class FlashcardScreen {
                   this.flashcardContainer.removeChild(this.flashcardContainer.firstChild);
               }
 
+              console.log("now:"+this.cnt);
+
+              for(let i=this.cnt;i<this.length;i++)
+              {
+                  if(i === this.length-1)
+                  {
+                      this.cnt = i;
+                      break;
+                  }
+
+                  if(this.REdeck[i+1] === false)
+                  {
+                      this.cnt=i;
+                      break;
+                  }
+              }
+
+              console.log("next:"+this.cnt)
+
               if(this.cnt === this.length-1)
               {
+                  delete this.card ;
                   const back = document.querySelector('body');
                   back.style.backgroundColor = "#d0e6df" ;
                   let cardend = new CustomEvent("cardend",{detail:{Right : this.R , Wrong : this.W}});
@@ -142,15 +187,15 @@ class FlashcardScreen {
               }
               else
               {
+                  delete this.card ;
                   this.card = new Flashcard(this.flashcardContainer, this.words[this.cnt+1][0], this.words[this.cnt+1][1]);
                   this.card.flashcardElement.addEventListener('pointermove', this.getDistance);
                   this.card.flashcardElement.addEventListener('pointerup', this.next);
-
-                  this.cnt ++ ;
-
+                  this.cnt++ ;
                   const back = document.querySelector('body');
                   back.style.backgroundColor = "#d0e6df" ;
               }
+
 
 
           }
