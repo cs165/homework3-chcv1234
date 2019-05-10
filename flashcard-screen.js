@@ -94,7 +94,6 @@ class FlashcardScreen {
 
   getDistance(event)
   {
-    console.log(this.card.translateX);
 
       const back = document.querySelector('body');
 

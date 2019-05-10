@@ -16,6 +16,8 @@ class Flashcard {
       this.dragStarted = false;
       this.translateX = 0;
       this.translateY = 0;
+      this.upX = null;
+      this.upY = null;
 
     this.containerElement = containerElement;
 
@@ -69,15 +71,22 @@ class Flashcard {
 
   _flipCard(event) {
 
-    if((this.originX - event.clientX) === 0 && (this.originY - event.clientY) === 0)
+      this.dragStarted = false;
+      this.upX = event.clientX ;
+      this.upY = event.clientY ;
+
+      console.log(event.clientX);
+
+    if((this.originX - this.upX) === 0 && (this.originY - this.upY) === 0)
     {
         this.flashcardElement.classList.toggle('show-word');
     }
 
-    if((this.originX - event.clientX) < 150 && (this.originX - event.clientX) > -150 )
+    if((this.translateX) < 150 && (this.translateX) > -150 )
     {
         event.currentTarget.style.transform = 'translate(' + 0 + 'px, ' + 0 + 'px)' ;
         event.currentTarget.style.transition = 'transform .6s' ;
+
     }
 
   }
@@ -112,10 +121,11 @@ class Flashcard {
         //console.log(this.translateX);
     }
 
+    /*
     onDragEnd(event) {
         dragStarted = false;
         offsetX += event.clientX - originX;
         offsetY += event.clientY - originY;
     }
-
+    */
 }
